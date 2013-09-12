@@ -11,9 +11,10 @@ var PublishViewModel = BaseViewModel.extend({
     getItems: function() {
         var self = this;
         $.getJSON("/api/item", function(resp) {
+            console.log(resp);
             self.pushArray(self.items, resp.response);
         });
-    },
+    }
 });
 
 
