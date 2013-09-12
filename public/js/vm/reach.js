@@ -85,6 +85,16 @@ var ReachViewModel = BaseViewModel.extend({
             return { date: dateFormat.parse(data.timestamp), value: parseInt(data.value) }
         });
 
+        var imprs_vir = _.map(filtered, function(obj) {
+            var data = ko.mapping.toJS(obj.post_impressions_viral()[0]);
+            return { date: dateFormat.parse(data.timestamp), value: parseInt(data.value) }
+        });
+
+        var imprs_pay = _.map(filtered, function(obj) {
+            var data = ko.mapping.toJS(obj.post_impressions_paid()[0]);
+            return { date: dateFormat.parse(data.timestamp), value: parseInt(data.value) }
+        });
+
         var sort = function (coll) {
             return _.sortBy(coll, function(obj) {
                 return obj.date;
@@ -94,9 +104,11 @@ var ReachViewModel = BaseViewModel.extend({
         // sort data
         imprs = sort(imprs);
         imprs_org = sort(imprs_org);
+        imprs_vir = sort(imprs_vir);
+        imprs_pay = sort(imprs_pay);
 
         // create merged collection to calculate graph domain
-        var merged = _.union(imprs, imprs_org);
+        var merged = _.union(imprs, imprs_org, imprs_vir, imprs_pay);
 
         // scale functions
         var x = d3.time.scale().range([0, gprop.width - gprop.margin.left - gprop.margin.right]);
@@ -144,5 +156,19 @@ var ReachViewModel = BaseViewModel.extend({
             .attr('class', 'line')
             .attr('d', line)
             .style('stroke', 'darkred');
+
+        // draw paid impressions graph
+        svg.append('path')
+            .datum(imprs_pay)
+            .attr('class', 'line')
+            .attr('d', line)
+            .style('stroke', 'darkgreen');
+
+        // draw viral impressions graph
+        svg.append('path')
+            .datum(imprs_vir)
+            .attr('class', 'line')
+            .attr('d', line)
+            .style('stroke', 'cyan');
     }
 });
