@@ -1,10 +1,40 @@
 <div id="page-publish">
     <h2>Publishing items</h2>
 
+    <form data-bind="submit: createItem">
+        <div class="col">
+            <label>Message</label>
+            <input id="itemMessage" data-bind="value: itemMessage" type="text"/>
+
+            <label>Network</label>
+            <select data-bind="options: availableNetworks, value:itemNetwork"></select>
+        </div>
+        <div class="col">
+            <label>Type</label>
+            <select data-bind="options: availableTypes, value:itemType"></select>
+
+            <label>Media</label>
+            <input id="itemMedia" data-bind="value: itemMedia" type="text"/>
+        </div>
+        <div class="col">
+
+            <label>Tags</label>
+            <input type="text" data-bind="value: tagInput"/>
+            <button data-bind="click:addTag" class="btn btn-small add-tag-button">Add tag</button>
+            <ul data-bind="foreach: itemTags" class="inline">
+                <li><span data-bind="text: $data" class="label label-info"></span></li>
+            </ul>
+
+            <button class="btn create-button" type="submit">Create item</button>
+        </div>
+    </form>
+
+    <hr>
+
     <ul data-bind="foreach: items" class="unstyled">
-        <li>
+        <li class="publish-item">
             <div class="well">
-                <img height="200" width="200" class="pull-right" data-bind="attr: { src:content.media.url }"/>
+                <img class="pull-right" data-bind="attr: { src:content.media.url }"/>
 
                 <div>
                     <strong>Message:</strong> <span data-bind="text: content.message"></span>
@@ -23,30 +53,4 @@
             </div>
         </li>
     </ul>
-
-    <form data-bind="submit: createItem">
-        <label>Message</label>
-        <input id="itemMessage" data-bind="value: itemMessage" type="text"/>
-
-        <label>Network</label>
-        <select data-bind="options: availableNetworks, value:itemNetwork"></select>
-
-        <label>Type</label>
-        <select data-bind="options: availableTypes, value:itemType"></select>
-
-        <label>Media</label>
-        <input id="itemMedia" data-bind="value: itemMedia" type="text"/>
-
-        <div>
-            <span>Tags</span>
-            <ul data-bind="foreach: itemTags" class="inline tag-list">
-                <li><span data-bind="text: $data" class="label label-info"></span></li>
-            </ul>
-        </div>
-
-        <input type="text" data-bind="value: tagInput"/>
-        <button data-bind="click:addTag">Add tag</button>
-        <hr>
-        <button type="submit">Create item</button>
-    </form>
 </div>

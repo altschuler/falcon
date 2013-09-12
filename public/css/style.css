@@ -14,3 +14,22 @@
 #page-publish .tag-list {
   display: inline;
 }
+#page-publish .publish-item img {
+  max-height: 80px;
+}
+#page-publish form {
+  height: 120px;
+}
+#page-publish form .col {
+  float: left;
+  margin-right: 20px;
+  position: relative;
+  height: 120px;
+}
+#page-publish form .create-button {
+  position: absolute;
+  bottom: 0;
+}
+#page-publish form .add-tag-button {
+  margin-top: -10px;
+}
