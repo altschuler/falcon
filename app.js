@@ -32,10 +32,10 @@ var server = http.createServer(app).listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));
 });
 
-
-
-// map of connections to socket
+// map of tickers for sockets
 var tickers = {}
+// map of last used impression dates for sockets
+var dates = {}
 
 // socket connection handling
 socketio.listen(server).on('connection', function (socket) {
@@ -46,20 +46,34 @@ socketio.listen(server).on('connection', function (socket) {
 
         tickers[socket.id] = setInterval(function () {
             console.log('Updating session ' + socket.id);
-            socket.emit('update', createImpressionsNode());
+            socket.emit('update', createImpressionsNode(socket.id));
         }, 2000);
     });
 
     socket.on('disconnect', function () {
         console.log('Stopping live feed for ' + socket.id);
 
+        // clean connection usage
         clearInterval(tickers[socket.id]);
+        delete tickers[socket.id];
+        delete dates[socket.id];
     });
 });
 
-var createImpressionsNode = function () {
-    var randInt = function() { return Math.floor(Math.random()  * 10000).toString() };
-    var date = new Date().toISOString();
+var createImpressionsNode = function (socketId) {
+
+    var randInt = function() { return Math.floor(Math.random()  * 100000).toString() };
+
+    // initialize date to fixed one
+    if (dates[socketId] === undefined)
+        dates[socketId] = new Date("2013-08-12T09:15:16.74Z");
+
+    // create and save new date
+    dates[socketId] = new Date(dates[socketId].getTime() + Math.random() * 50000);
+
+    // create new date by adding a few minutes
+    var date = dates[socketId].toISOString();
+
     return {
         "post_impressions": [
             {
