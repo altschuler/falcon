@@ -34,5 +34,5 @@ $(document).ready(function() {
 
     // load default page
 
-    loadPage('publish');
+    loadPage('reach');
 });

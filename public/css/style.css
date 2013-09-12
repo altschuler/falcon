@@ -16,6 +16,5 @@ svg .x.axis path {
 }
 svg .line {
   fill: none;
-  stroke: steelblue;
-  stroke-width: 1.5px;
+  stroke-width: 2px;
 }

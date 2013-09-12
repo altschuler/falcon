@@ -28,21 +28,21 @@ var ReachViewModel = BaseViewModel.extend({
 
         // listen
         this.socket.on('connect', function () {
-            console.log("Socket connected");
+            console.log("Reach socket connected");
         });
 
         this.socket.on('update', function(data) {
-            console.log("Socket update");
+            console.log("Reach socket update");
             self.reaches.push(ko.mapping.fromJS(data));
             self.renderReaches();
         });
 
         this.socket.on('disconnect', function() {
-            console.log("Socket disconnected");
+            console.log("Reach socket disconnected");
         });
 
         // emit
-        this.socket.send('feed_me');
+        this.socket.emit('reachFeed');
     },
 
     // reaches
@@ -77,16 +77,26 @@ var ReachViewModel = BaseViewModel.extend({
 
         var imprs = _.map(filtered, function(obj) {
             var data = ko.mapping.toJS(obj.post_impressions()[0]);
-            return {
-                date: dateFormat.parse(data.timestamp),
-                value: parseInt(data.value)
-            }
+            return { date: dateFormat.parse(data.timestamp), value: parseInt(data.value) }
         });
 
-        // sort data
-        imprs = _.sortBy(imprs, function(obj) {
-            return obj.date;
+        var imprs_org = _.map(filtered, function(obj) {
+            var data = ko.mapping.toJS(obj.post_impressions_organic()[0]);
+            return { date: dateFormat.parse(data.timestamp), value: parseInt(data.value) }
         });
+
+        var sort = function (coll) {
+            return _.sortBy(coll, function(obj) {
+                return obj.date;
+            });
+        };
+
+        // sort data
+        imprs = sort(imprs);
+        imprs_org = sort(imprs_org);
+
+        // create merged collection to calculate graph domain
+        var merged = _.union(imprs, imprs_org);
 
         // scale functions
         var x = d3.time.scale().range([0, gprop.width - gprop.margin.left - gprop.margin.right]);
@@ -98,11 +108,12 @@ var ReachViewModel = BaseViewModel.extend({
         var yAxis = d3.svg.axis().scale(y).orient('left');
 
         var line = d3.svg.line()
-            .x(function(d) {return x(d.date)})
-            .y(function(d) {return y(d.value)});
+            .x(function(d) { return x(d.date) })
+            .y(function(d) { return y(d.value) });
 
-        x.domain(d3.extent(imprs, function(d) { return d.date; }));
-        y.domain(d3.extent(imprs, function(d) { return d.value; }));
+        // use the merged collection to calculate the doman
+        x.domain(d3.extent(merged, function(d) { return d.date; }));
+        y.domain(d3.extent(merged, function(d) { return d.value; }));
 
         var svg = d3.select('.graph').append('svg:svg')
             .attr('width', gprop.width + gprop.margin.top + gprop.margin.bottom)
@@ -120,10 +131,18 @@ var ReachViewModel = BaseViewModel.extend({
             .attr("class", "y axis")
             .call(yAxis)
 
-        // draw line graph
+        // draw impressions graph
         svg.append('path')
             .datum(imprs)
             .attr('class', 'line')
-            .attr('d', line);
+            .attr('d', line)
+            .style('stroke', 'steelblue');
+
+        // draw organic impressions graph
+        svg.append('path')
+            .datum(imprs_org)
+            .attr('class', 'line')
+            .attr('d', line)
+            .style('stroke', 'darkred');
     }
 });
