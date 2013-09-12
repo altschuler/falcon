@@ -29,7 +29,8 @@ var loadPage = function (template) {
 
 var vmMap = {
     'publish': PublishViewModel,
-    'reach': ReachViewModel
+    'reach': ReachViewModel,
+    'about': BaseViewModel
 };
 
 $(document).ready(function () {
