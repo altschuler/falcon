@@ -7,7 +7,7 @@ ko.bindingHandlers.pager = {
     }
 };
 
-var vm = new MainViewModel('publish');
+var vm = new MainViewModel('reach');
 var container = $('.page-container');
 
 // load and construct new page via ajax

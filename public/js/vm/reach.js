@@ -75,33 +75,25 @@ var ReachViewModel = BaseViewModel.extend({
         // parse data
         var dateFormat = d3.time.format('%Y-%m-%dT%H:%M:%S.%LZ');
 
-        var imprs = _.map(filtered, function(obj) {
-            var data = ko.mapping.toJS(obj.post_impressions()[0]);
-            return { date: dateFormat.parse(data.timestamp), value: parseInt(data.value) }
-        });
+        var getData = function(key) {
+            return _.map(filtered, function(obj) {
+                var data = ko.mapping.toJS(obj[key]()[0]);
+                return { date: dateFormat.parse(data.timestamp), value: parseInt(data.value) }
+            });
+        }
 
-        var imprs_org = _.map(filtered, function(obj) {
-            var data = ko.mapping.toJS(obj.post_impressions_organic()[0]);
-            return { date: dateFormat.parse(data.timestamp), value: parseInt(data.value) }
-        });
+        var imprs = getData('post_impressions');
+        var imprs_org = getData('post_impressions_organic');
+        var imprs_vir = getData('post_impressions_viral');
+        var imprs_pay = getData('post_impressions_paid');
 
-        var imprs_vir = _.map(filtered, function(obj) {
-            var data = ko.mapping.toJS(obj.post_impressions_viral()[0]);
-            return { date: dateFormat.parse(data.timestamp), value: parseInt(data.value) }
-        });
-
-        var imprs_pay = _.map(filtered, function(obj) {
-            var data = ko.mapping.toJS(obj.post_impressions_paid()[0]);
-            return { date: dateFormat.parse(data.timestamp), value: parseInt(data.value) }
-        });
-
+        // sort data
         var sort = function (coll) {
             return _.sortBy(coll, function(obj) {
                 return obj.date;
             });
         };
 
-        // sort data
         imprs = sort(imprs);
         imprs_org = sort(imprs_org);
         imprs_vir = sort(imprs_vir);
@@ -113,7 +105,6 @@ var ReachViewModel = BaseViewModel.extend({
         // scale functions
         var x = d3.time.scale().range([0, gprop.width - gprop.margin.left - gprop.margin.right]);
         var y = d3.scale.linear().range([gprop.height, 0]);
-
 
         // axis
         var xAxis = d3.svg.axis().scale(x).orient('bottom');
@@ -127,9 +118,10 @@ var ReachViewModel = BaseViewModel.extend({
         x.domain(d3.extent(merged, function(d) { return d.date; }));
         y.domain(d3.extent(merged, function(d) { return d.value; }));
 
-        var svg = d3.select('.graph').append('svg:svg')
+        // add 100 to height to make room for legend
+        var svg = d3.select('.graph').append('svg')
             .attr('width', gprop.width + gprop.margin.top + gprop.margin.bottom)
-            .attr('height', gprop.height + gprop.margin.left + gprop.margin.right)
+            .attr('height', gprop.height + gprop.margin.left + gprop.margin.right + 100)
             .append("g")
             .attr("transform", "translate(" + gprop.margin.left + "," + gprop.margin.top + ")");
 
@@ -143,32 +135,40 @@ var ReachViewModel = BaseViewModel.extend({
             .attr("class", "y axis")
             .call(yAxis)
 
-        // draw impressions graph
-        svg.append('path')
-            .datum(imprs)
-            .attr('class', 'line')
-            .attr('d', line)
-            .style('stroke', 'steelblue');
+        var drawPath = function (data, color) {
+            svg.append('path')
+                .datum(data)
+                .attr('class', 'line')
+                .attr('d', line)
+                .style('stroke', color);
+        };
 
-        // draw organic impressions graph
-        svg.append('path')
-            .datum(imprs_org)
-            .attr('class', 'line')
-            .attr('d', line)
-            .style('stroke', 'darkred');
+        // draw impressions data
+        drawPath(imprs, 'steelblue');
+        drawPath(imprs_org, 'darkred');
+        drawPath(imprs_vir, 'darkgreen');
+        drawPath(imprs_pay, 'cyan');
 
-        // draw paid impressions graph
-        svg.append('path')
-            .datum(imprs_pay)
-            .attr('class', 'line')
-            .attr('d', line)
-            .style('stroke', 'darkgreen');
+        // legend
+        var legend = function (x, y, color, label) {
+            svg.append('rect')
+                .attr('width', 50)
+                .attr('height', 10)
+                .attr('x', x)
+                .attr('y', y)
+                .style('fill', color);
 
-        // draw viral impressions graph
-        svg.append('path')
-            .datum(imprs_vir)
-            .attr('class', 'line')
-            .attr('d', line)
-            .style('stroke', 'cyan');
+            svg.append('text')
+                .attr('x', x + 60)
+                .attr('y', y + 9)
+                .text(label)
+        };
+
+        legend(0, gprop.height + 50, 'steelblue', 'impressions');
+        legend(0, gprop.height + 70, 'darkred', 'organic');
+        legend(0, gprop.height + 90, 'darkgreen', 'viral');
+        legend(0, gprop.height + 110, 'cyan', 'paid');
+
+
     }
 });
