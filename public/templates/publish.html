@@ -1,21 +1,18 @@
-<h2>Publish page</h2>
+<div id="page-publish">
+    <h2>Publishing items</h2>
 
-<table data-bind="foreach: items" class="inline">
-    <tr>
-        <td>
-            <div>
-                <span>Message: <span data-bind="text: content.message"></span></span>
-                <br>
-                <span>Network: <span data-bind="text: content.network"></span></span>
-                <br>
-                <span>Type: <span data-bind="text: content.postType"></span></span>
-            </div>
+    <ul data-bind="foreach: items" class="inline">
+        <li>
+            <div>Message: <span data-bind="text: content.message"></span></div>
+            <div>Network: <span data-bind="text: content.network"></span></div>
+            <div>Type: <span data-bind="text: content.postType"></span></div>
             <div class="tags">
-                <ul data-bind="foreach: tags" class="inline">
+                <span>Tags:</span>
+                <ul data-bind="foreach: tags" class="inline tag-list">
                     <li><span data-bind="text: $data" class="label label-info"></span></li>
                 </ul>
             </div>
             <img data-bind="attr: { src:content.media.url }"/>
-        </td>
-    </tr>
-</table>
+        </li>
+    </ul>
+</div>

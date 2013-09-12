@@ -18,7 +18,7 @@ var loadPage = function (template) {
     if (typeof currentVM.destruct === 'function')
         currentVM.destruct();
 
-    var nextVM = vmMap[template];
+    var nextVM = new vmMap[template];
     container.load('/templates/' + template + '.html', function () {
         ko.applyBindings(nextVM, this);
 
@@ -28,8 +28,8 @@ var loadPage = function (template) {
 }
 
 var vmMap = {
-    'publish': new PublishViewModel(),
-    'reach': new ReachViewModel()
+    'publish': PublishViewModel,
+    'reach': ReachViewModel
 };
 
 $(document).ready(function () {

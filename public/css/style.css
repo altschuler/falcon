@@ -1,20 +1,16 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
-a {
-  color: #00B7FF;
-}
-svg .axis path,
-svg .axis line {
+#page-reach svg .axis path,
+#page-reach svg .axis line {
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
 }
-svg .x.axis path {
+#page-reach svg .x.axis path {
   display: none;
 }
-svg .line {
+#page-reach svg .line {
   fill: none;
   stroke-width: 2px;
+}
+#page-publish .tag-list {
+  display: inline;
 }
