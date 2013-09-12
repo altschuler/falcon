@@ -1,18 +1,26 @@
 <div id="page-publish">
     <h2>Publishing items</h2>
 
-    <ul data-bind="foreach: items">
+    <ul data-bind="foreach: items" class="unstyled">
         <li>
-            <div>Message: <span data-bind="text: content.message"></span></div>
-            <div>Network: <span data-bind="text: content.network"></span></div>
-            <div>Type: <span data-bind="text: content.postType"></span></div>
-            <div class="tags">
-                <span>Tags:</span>
-                <ul data-bind="foreach: tags" class="inline tag-list">
-                    <li><span data-bind="text: $data" class="label label-info"></span></li>
-                </ul>
+            <div class="well">
+                <img height="200" width="200" class="pull-right" data-bind="attr: { src:content.media.url }"/>
+
+                <div>
+                    <strong>Message:</strong> <span data-bind="text: content.message"></span>
+                </div>
+                <div>
+                    <strong>Network:</strong> <span data-bind="text: content.network"></span>
+                </div>
+                <div>
+                    <strong>Type:</strong> <span data-bind="text: content.postType"></span>
+                </div>
+                <div class="tags">
+                    <ul data-bind="foreach: tags" class="inline tag-list">
+                        <li><span data-bind="text: $data" class="label label-info"></span></li>
+                    </ul>
+                </div>
             </div>
-            <img height="100" width="100" data-bind="attr: { src:content.media.url }"/>
         </li>
     </ul>
 
@@ -29,12 +37,12 @@
         <label>Media</label>
         <input id="itemMedia" data-bind="value: itemMedia" type="text"/>
 
-         <div>
-        <span>Tags</span>
-        <ul data-bind="foreach: itemTags" class="inline tag-list">
-            <li><span data-bind="text: $data" class="label label-info"></span></li>
-        </ul>
-         </div>
+        <div>
+            <span>Tags</span>
+            <ul data-bind="foreach: itemTags" class="inline tag-list">
+                <li><span data-bind="text: $data" class="label label-info"></span></li>
+            </ul>
+        </div>
 
         <input type="text" data-bind="value: tagInput"/>
         <button data-bind="click:addTag">Add tag</button>
