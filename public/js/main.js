@@ -7,7 +7,7 @@ ko.bindingHandlers.pager = {
     }
 };
 
-var vm = new MainViewModel('reach');
+var vm = new MainViewModel('publish');
 var container = $('.page-container');
 
 // load and construct new page via ajax
@@ -34,6 +34,11 @@ var vmMap = {
 };
 
 $(document).ready(function () {
+    // route to hash if set
+    var hash = window.location.hash.substr(1);
+    if (hash.length > 0)
+        vm.currentPage(hash);
+
     ko.applyBindings(vm, $('#wrapper')[0]);
 
     // load default page
