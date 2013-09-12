@@ -6,11 +6,20 @@ ko.bindingHandlers.pager = {
     }
 };
 
+var container = $('.page-container');
+
 var loadPage = function(template) {
-    var vm = vmMap[template];
-    $('.page-container').load('/templates/' + template + '.html', function() {
-        ko.applyBindings(vm, this);
-        vm.construct();
+    // destruct current viewmodel (if present)
+    var currentVM = ko.dataFor(container.get(0));
+    if (currentVM.destruct !== undefined)
+        currentVM.destruct();
+
+    var nextVM = vmMap[template];
+    container.load('/templates/' + template + '.html', function() {
+        ko.applyBindings(nextVM, this);
+
+        // construct new vm
+        nextVM.construct();
     });
 }
 
@@ -21,15 +30,6 @@ var vmMap = {
 
 
 $(document).ready(function() {
-    var iosocket = io.connect();
-    iosocket.on('connect', function () {
-        console.log("Socket connected");
-
-        iosocket.on('update', function(resp) {
-            console.log("Socket update");
-        });
-    });
-
     ko.applyBindings({}, $('#wrapper')[0]);
 
     // load default page
