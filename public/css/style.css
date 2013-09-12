@@ -5,3 +5,17 @@ body {
 a {
   color: #00B7FF;
 }
+svg .axis path,
+svg .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+svg .x.axis path {
+  display: none;
+}
+svg .line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}

@@ -1,9 +1,11 @@
 var express = require('express');
-//var routes = require('./routes');
-var item = require('./routes/item');
 var http = require('http');
 var path = require('path');
 var socketio = require('socket.io');
+
+// rest
+var item = require('./routes/item');
+var reach = require('./routes/reach');
 
 // express
 var app = express();
@@ -23,7 +25,7 @@ if ('development' == app.get('env')) {
 
 // routing
 app.get('/item/list', item.list);
-
+app.get('/reach/list', reach.list);
 
 // server
 var server = http.createServer(app).listen(app.get('port'), function(){

@@ -9,25 +9,31 @@
 
 <body>
 <div id="wrapper" class="container">
-    <table data-bind="foreach: items" class="inline">
-        <tr>
-            <td>
-                <div>
-                    <span>Message: <span data-bind="text: content.message"></span></span>
-                    <br>
-                    <span>Network: <span data-bind="text: content.network"></span></span>
-                    <br>
-                    <span>Type: <span data-bind="text: content.postType"></span></span>
-                </div>
-                <div class="tags">
-                    <ul data-bind="foreach: tags" class="inline">
-                        <li><span data-bind="text: $data" class="label label-info"></span></li>
-                    </ul>
-                </div>
-                <img data-bind="attr: { src:content.media.url }"/>
-            </td>
-        </tr>
-    </table>
+    <div class="page-items">
+        <table data-bind="foreach: items" class="inline">
+            <tr>
+                <td>
+                    <div>
+                        <span>Message: <span data-bind="text: content.message"></span></span>
+                        <br>
+                        <span>Network: <span data-bind="text: content.network"></span></span>
+                        <br>
+                        <span>Type: <span data-bind="text: content.postType"></span></span>
+                    </div>
+                    <div class="tags">
+                        <ul data-bind="foreach: tags" class="inline">
+                            <li><span data-bind="text: $data" class="label label-info"></span></li>
+                        </ul>
+                    </div>
+                    <img data-bind="attr: { src:content.media.url }"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="page-reach">
+        <h2>Reach</h2>
+        <div class="graph"></div>
+    </div>
 </div>
 
 <!-- vendor javascript -->
@@ -37,6 +43,7 @@
 <script type="text/javascript" src="js/vendor/socket.io.js"></script>
 <script type="text/javascript" src="js/vendor/knockout-latest.debug.js"></script>
 <script type="text/javascript" src="js/vendor/knockout.mapping-latest.debug.js"></script>
+<script type="text/javascript" src="js/vendor/d3.v3.js"></script>
 
 <!-- user javascript -->
 <script type="text/javascript" src="js/main.js"></script>
