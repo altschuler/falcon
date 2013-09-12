@@ -1,7 +1,7 @@
 <div id="page-publish">
     <h2>Publishing items</h2>
 
-    <ul data-bind="foreach: items" class="inline">
+    <ul data-bind="foreach: items">
         <li>
             <div>Message: <span data-bind="text: content.message"></span></div>
             <div>Network: <span data-bind="text: content.network"></span></div>
@@ -12,10 +12,9 @@
                     <li><span data-bind="text: $data" class="label label-info"></span></li>
                 </ul>
             </div>
-            <img data-bind="attr: { src:content.media.url }"/>
+            <img height="100" width="100" data-bind="attr: { src:content.media.url }"/>
         </li>
     </ul>
-
 
     <form data-bind="submit: createItem">
         <label>Message</label>
@@ -26,6 +25,9 @@
 
         <label>Type</label>
         <select data-bind="options: availableTypes, value:itemType"></select>
+
+        <label>Media</label>
+        <input id="itemMedia" data-bind="value: itemMedia" type="text"/>
 
          <div>
         <span>Tags</span>

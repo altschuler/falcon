@@ -1,13 +1,15 @@
-var socketio = require('socket.io');
+var io = require('socket.io');
 
 // map of tickers for sockets
 var tickers = {}
 // map of last used impression dates for sockets
 var dates = {}
 
+var publishSocket = null;
+
 module.exports.listen = function (server) {
     // socket connection handling
-    socketio.listen(server).on('connection', function (socket) {
+    io = io.listen(server).on('connection', function (socket) {
         // listen for reach live feed requests
         socket.on('reachFeed', function () {
             console.log('Starting reach feed for ' + socket.id);
@@ -16,6 +18,12 @@ module.exports.listen = function (server) {
                 console.log('Updating session ' + socket.id);
                 socket.emit('update', createReachData(socket.id));
             }, 2000);
+        });
+
+        // listen for publish live feed request
+        socket.on('publishFeed', function () {
+            publishSocket = socket;
+            console.log('Starting publish feed for ' + socket.id);
         });
 
         socket.on('disconnect', function () {
@@ -31,7 +39,7 @@ module.exports.listen = function (server) {
 
 exports.broadcast = {
     publishingItem: function (item) {
-        socketio.emit('publishUpdate', item);
+        io.sockets.emit('publishUpdate', item);
     }
 }
 

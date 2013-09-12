@@ -3319,7 +3319,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
     this.doc.parentWindow.s = this;
 
     var iframeC = this.doc.createElement('div');
-    iframeC.className = 'socketio';
+    iframeC.className = 'io';
 
     this.doc.body.appendChild(iframeC);
     this.iframe = this.doc.createElement('iframe');
@@ -3695,7 +3695,7 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
         , id = this.iframeId = 'socketio_iframe_' + this.index
         , iframe;
 
-      form.className = 'socketio';
+      form.className = 'io';
       form.style.position = 'absolute';
       form.style.top = '0px';
       form.style.left = '0px';

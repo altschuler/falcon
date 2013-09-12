@@ -24,7 +24,7 @@ if ('development' == app.get('env')) {
 
 // api routing
 app.get('/api/item', item.list);
-app.post('/api/item/create', item.create);
+app.post('/api/item', item.create);
 app.get('/api/reach', reach.list);
 
 // server

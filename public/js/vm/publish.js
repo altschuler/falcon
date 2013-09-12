@@ -5,18 +5,21 @@ var PublishViewModel = BaseViewModel.extend({
     socket: null,
 
     // item creation
-    itemTags: ko.observableArray(),
-    itemMessage: ko.observable(),
-    itemType: ko.observable(),
-    itemNetwork: ko.observable(),
+    itemTags: ko.observableArray([]),
+    itemMessage: ko.observable(''),
+    itemType: ko.observable(''),
+    itemMedia: ko.observable(''),
+    itemNetwork: ko.observable(''),
 
-    tagInput: ko.observable(),
+    tagInput: ko.observable(''),
 
     availableNetworks: ['facebook', 'instagram', 'myspace', 'twitter'],
     availableTypes: ['photo', 'status', 'audio'],
 
     // initialization
     construct: function() {
+        var self = this;
+
         this.items([]);
 
         this.getItems();
@@ -30,8 +33,7 @@ var PublishViewModel = BaseViewModel.extend({
 
         this.socket.on('publishUpdate', function(data) {
             console.log("Publish socket update");
-            self.reaches.push(ko.mapping.fromJS(data));
-            self.renderReaches();
+            self.items.push(ko.mapping.fromJS(data));
         });
 
         this.socket.on('disconnect', function() {
@@ -42,17 +44,33 @@ var PublishViewModel = BaseViewModel.extend({
         this.socket.emit('publishFeed');
     },
 
+    destruct: function() {
+        this.socket.disconnect();
+    },
+
     getItems: function() {
         var self = this;
 
-        $.getJSON("/api/item", function(resp) {
-            self.pushArray(self.items, resp.response);
+        $.getJSON("/api/item", function(res) {
+            self.pushArray(self.items, res.response);
         });
     },
 
     createItem: function() {
+        var self = this;
+        $.ajax({
+            url: '/api/item',
+            method: 'POST',
+            dataType: 'json',
+            data: self.getFormItem()
+        })
 
-        console.log(this.getFormItem());
+        // clear form
+        this.itemMessage('');
+        this.itemType('');
+        this.itemNetwork('');
+        this.itemMedia('');
+        this.itemTags([]);
     },
 
     addTag: function() {
@@ -72,6 +90,7 @@ var PublishViewModel = BaseViewModel.extend({
             message: this.itemMessage(),
             type: this.itemType(),
             network: this.itemNetwork(),
+            media: this.itemMedia(),
             tags: this.itemTags()
         }
     }

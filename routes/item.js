@@ -15,10 +15,45 @@ exports.list = function(req, res) {
 
 exports.create = function(req, res) {
     // no validation whatsoever
-    data.response.push(req.body);
+    var item = createItem(req.body);
+    data.response.push(item);
 
     // emit the update via web socket
-    sharedSocket.broadcast.publishingItem(req.body);
+    sharedSocket.broadcast.publishingItem(item);
 
     res.json({status:0});
 };
+
+var createItem = function(data) {
+    return {
+        "id": "8a1330c93e31b8af013e360d6a2106ea",
+        "content": {
+            "message": data.message,
+            "id": "8a1330c93e31b8af013e360d6a2106ea",
+            "network": data.network,
+            "postType": data.type,
+            "media": {
+                "fileName": "some_image.jpg",
+                "url": data.media || ""
+            }
+        },
+        "tags": data.tags || [],
+        "status": "draft",
+        "channels": [
+            {"name": "Konfirmanden", "id": 433104606739910}
+        ],
+        "scheduled": "2013-08-08T08:00:00.000Z",
+        "geo": {
+            "countries": [
+                {"value": "Afghanistan", "key": "134"}
+            ],
+            "languages": [
+                {"value": "Afrikaans", "key": "31"}
+            ],
+            "cities": [],
+            "regions": []
+        }
+    }
+
+
+}
