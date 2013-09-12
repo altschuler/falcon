@@ -8,10 +8,11 @@ ko.bindingHandlers.pager = {
 
 var container = $('.page-container');
 
+// load and construct new page via ajax
 var loadPage = function(template) {
     // destruct current viewmodel (if present)
     var currentVM = ko.dataFor(container.get(0));
-    if (currentVM.destruct !== undefined)
+    if (typeof currentVM.destruct === 'function')
         currentVM.destruct();
 
     var nextVM = vmMap[template];
@@ -28,10 +29,10 @@ var vmMap = {
     'reach': new ReachViewModel()
 };
 
-
 $(document).ready(function() {
     ko.applyBindings({}, $('#wrapper')[0]);
 
     // load default page
+
     loadPage('publish');
 });

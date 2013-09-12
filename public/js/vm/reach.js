@@ -1,8 +1,48 @@
 var ReachViewModel = BaseViewModel.extend({
     reaches: ko.observableArray(),
+    isLive: ko.observable(false),
+    socket: null,
 
     construct: function() {
         this.getReach();
+    },
+
+    destruct: function() {
+        if (this.socket != null)
+            this.socket.disconnect();
+    },
+
+    stopLiveFeed: function() {
+        if (this.socket != null)
+            this.socket.disconnect();
+
+        this.isLive(false);
+    },
+
+    startLiveFeed: function() {
+        var self = this;
+
+        this.isLive(true);
+
+        this.socket = io.connect("http://localhost:3000", {'force new connection': true});
+
+        // listen
+        this.socket.on('connect', function () {
+            console.log("Socket connected");
+        });
+
+        this.socket.on('update', function(data) {
+            console.log("Socket update");
+            self.reaches.push(ko.mapping.fromJS(data));
+            self.renderReaches();
+        });
+
+        this.socket.on('disconnect', function() {
+            console.log("Socket disconnected");
+        });
+
+        // emit
+        this.socket.send('feed_me');
     },
 
     // reaches
@@ -17,6 +57,9 @@ var ReachViewModel = BaseViewModel.extend({
     },
 
     renderReaches: function() {
+        // empty graph container
+        $('.graph').empty();
+
         // filter away empty reach data
         var filtered = _.filter(this.reaches(), function(obj) {
             return typeof obj.post_impressions === 'function';

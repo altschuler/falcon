@@ -14,10 +14,6 @@ var PublishViewModel = BaseViewModel.extend({
             self.pushArray(self.items, resp.response);
         });
     },
-
-    addItem: function() {
-        io.send($('#message').val());
-    }
 });
 
 
