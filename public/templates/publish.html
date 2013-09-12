@@ -1,0 +1,21 @@
+<h2>Publish page</h2>
+
+<table data-bind="foreach: items" class="inline">
+    <tr>
+        <td>
+            <div>
+                <span>Message: <span data-bind="text: content.message"></span></span>
+                <br>
+                <span>Network: <span data-bind="text: content.network"></span></span>
+                <br>
+                <span>Type: <span data-bind="text: content.postType"></span></span>
+            </div>
+            <div class="tags">
+                <ul data-bind="foreach: tags" class="inline">
+                    <li><span data-bind="text: $data" class="label label-info"></span></li>
+                </ul>
+            </div>
+            <img data-bind="attr: { src:content.media.url }"/>
+        </td>
+    </tr>
+</table>

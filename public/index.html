@@ -9,34 +9,18 @@
 
 <body>
 <div id="wrapper" class="container">
-    <div class="page-items">
-        <table data-bind="foreach: items" class="inline">
-            <tr>
-                <td>
-                    <div>
-                        <span>Message: <span data-bind="text: content.message"></span></span>
-                        <br>
-                        <span>Network: <span data-bind="text: content.network"></span></span>
-                        <br>
-                        <span>Type: <span data-bind="text: content.postType"></span></span>
-                    </div>
-                    <div class="tags">
-                        <ul data-bind="foreach: tags" class="inline">
-                            <li><span data-bind="text: $data" class="label label-info"></span></li>
-                        </ul>
-                    </div>
-                    <img data-bind="attr: { src:content.media.url }"/>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div class="page-reach">
-        <h2>Reach</h2>
-        <div class="graph"></div>
-    </div>
+    <h1>Falcon</h1>
+    <ul class="nav nav-tabs">
+        <li data-bind="pager: 'publish'"><a href="#">Publish</a></li>
+        <li data-bind="pager: 'reach'"><a href="#">Reach</a></li>
+    </ul>
+
+    <!-- Main content container -->
+    <div class="page-container"></div>
 </div>
 
 <!-- vendor javascript -->
+<script type="text/javascript" src="js/vendor/class.js"></script>
 <script type="text/javascript" src="js/vendor/jquery.js"></script>
 <script type="text/javascript" src="js/vendor/underscore.js"></script>
 <script type="text/javascript" src="js/vendor/bootstrap.js"></script>
@@ -46,6 +30,10 @@
 <script type="text/javascript" src="js/vendor/d3.v3.js"></script>
 
 <!-- user javascript -->
+<script type="text/javascript" src="js/vm/base.js"></script>
+<script type="text/javascript" src="js/vm/reach.js"></script>
+<script type="text/javascript" src="js/vm/publish.js"></script>
+
 <script type="text/javascript" src="js/main.js"></script>
 
 </body>

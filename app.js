@@ -23,9 +23,9 @@ if ('development' == app.get('env')) {
     app.use(express.errorHandler());
 }
 
-// routing
-app.get('/item/list', item.list);
-app.get('/reach/list', reach.list);
+// api routing
+app.get('/api/item', item.list);
+app.get('/api/reach', reach.list);
 
 // server
 var server = http.createServer(app).listen(app.get('port'), function(){
