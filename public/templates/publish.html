@@ -15,4 +15,28 @@
             <img data-bind="attr: { src:content.media.url }"/>
         </li>
     </ul>
+
+
+    <form data-bind="submit: createItem">
+        <label>Message</label>
+        <input id="itemMessage" data-bind="value: itemMessage" type="text"/>
+
+        <label>Network</label>
+        <select data-bind="options: availableNetworks, value:itemNetwork"></select>
+
+        <label>Type</label>
+        <select data-bind="options: availableTypes, value:itemType"></select>
+
+         <div>
+        <span>Tags</span>
+        <ul data-bind="foreach: itemTags" class="inline tag-list">
+            <li><span data-bind="text: $data" class="label label-info"></span></li>
+        </ul>
+         </div>
+
+        <input type="text" data-bind="value: tagInput"/>
+        <button data-bind="click:addTag">Add tag</button>
+        <hr>
+        <button type="submit">Create item</button>
+    </form>
 </div>

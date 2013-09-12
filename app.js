@@ -10,7 +10,6 @@ var item = require('./routes/item'),
 // express
 var app = express();
 app.set('port', process.env.PORT || 3000);
-app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
